@@ -1,0 +1,98 @@
+
+查一下：
+  LD_PRELOAD 
+
+    https://blog.csdn.net/ieearth/article/details/49952047
+    http://www.cnblogs.com/net66/p/5609026.html
+
+  library injection
+
+  API hijacking
+
+    這次作業會這個應該就夠了
+    https://blog.netspi.com/function-hooking-part-i-hooking-shared-library-function-calls-in-linux/
+
+  library call monitor(LCM)
+
+  shared object(?)
+    
+    https://medium.com/fcamels-notes/linux-編譯-shared-library-的方法和注意事項-cb35844ef331
+
+  RTLD_NEXT:
+    讓preload的function可以找到真正想用的function
+    http://www.tecyle.com/2017/03/03/dlsym参数-rtld_next详解/
+
+要求：
+
+  inject the shared library into a process by using "LD_PRELOAD"
+
+
+  goal : dump the library call(passed parameters and the returned values)
+
+  default : write to stderr, or may write the output to a filename specified by and environment variable "MONITOR_OUTPUT" 
+
+  don't have to implement any monitored program by yourself. Instead, you should work with those binaries already installed in the system, or the test cases providesd by the instructor.
+
+  For char * data type, you may optionally print it out as a string.
+
+  For file descriptors (passed as an int), FILE*, and DIR* pointers, you can convert them to corresponding file names.
+  
+  For struct stat or its pointer, retrieve meaningful information from the structure. For example, file type, file size, and permissions.
+
+
+hint:
+
+  __attribute__((constructor))
+
+  working with # and ## operators in macros.
+
+  You may need to define macros to simplify your implementation.
+
+  variable-length function parameters, consider working with stdarg.h.
+
+  work with readelf or nm to get the symbol names
+ 
+-ldl 就是 link “dl module” 的意思，而 dl module = libdl.so
+
+
+
+
+
+想法：
+
+  可以用macro解決需要頻繁使用的dlsym動作?
+  可以用__attribute__(construct)來初始化所有的new_* ?
+
+  有沒有辦法不用一個個實作，而是用註冊的方式？  
+
+
+
+
+
+
+
+問題：
+
+  要記得有些function吃va_list，有些不吃
+
+  fscanf可以不用hook原本的scanf?  試試看vfscanf
+
+  fclose stderr的時候，要怎麼把return印出來?
+
+  MONITOR OUT 開檔的時候，return 0???   
+
+  stat系列(lstat) 可能會是不同的variable name
+
+  directory name from DIR  https://stackoverflow.com/questions/49392870/c-programming-directory-name-from-dir-struct 
+  https://blog.csdn.net/zhuyi2654715/article/details/7605051
+
+  dirfd() --> dirfd 可以把DIR轉成fd，然後再用fd去拿directory name
+
+
+目前進度：
+
+  name要用memset初始化 ->未做
+  char * 要用字串形式輸出，現在是用%x -> 未做
+  ls會壞掉->readlink壞掉->其實readlink沒有壞掉，要在自己的function內進行DLSYM
+  有時候constructor會沒有作用，超怪
+  "<STDOUT>" 旁邊要有雙引線

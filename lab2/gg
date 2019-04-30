@@ -1,0 +1,184 @@
+# fopen("/proc/filesystems", "re") = "/proc/filesystems"
+# fclose("/proc/filesystems") = 0
+# opendir(".") = "/home/tommy/nctu_lesson/unix/labs/lab2"
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = gg
+# lstat(1, "gg", "0x37c7e8c8" {mode=33204, size=206}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = Makefile
+# lstat(1, "Makefile", "0x37c7e990" {mode=33188, size=198}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = readme.md
+# lstat(1, "readme.md", "0x37c7ea58" {mode=33188, size=1113}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = .
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = main.c
+# lstat(1, "main.c", "0x37c7eb20" {mode=33204, size=146}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = test3
+# lstat(1, "test3", "0x37c7ebe8" {mode=16893, size=4096}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = notes.txt
+# lstat(1, "notes.txt", "0x37c7ecb0" {mode=33188, size=2809}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = test2
+# lstat(1, "test2", "0x37c7ed78" {mode=16893, size=4096}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = ss
+# lstat(1, "ss", "0x37c7ee40" {mode=33204, size=9487}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = ..
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = test
+# lstat(1, "test", "0x37c7ef08" {mode=16893, size=4096}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = fsmon.so
+# lstat(1, "fsmon.so", "0x37c7efd0" {mode=33277, size=34480}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = fsmon.c
+# lstat(1, "fsmon.c", "0x37c7f098" {mode=33204, size=31759}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = fs
+# lstat(1, "fs", "0x37c7f160" {mode=33188, size=2709}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = testcases
+# lstat(1, "testcases", "0x37c7f228" {mode=16877, size=4096}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = a.out
+# lstat(1, "a.out", "0x37c7f2f0" {mode=33277, size=8392}) = 0
+# closedir("/home/tommy/nctu_lesson/unix/labs/lab2") = 0
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd84, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b910, 1, 5, "<STDOUT>") = 5
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b8b0, 1, 7, "<STDOUT>") = 7
+# fwrite_unlocked(0x37c8b770, 1, 2, "<STDOUT>") = 2
+# fwrite_unlocked(0x37c8b790, 1, 8, "<STDOUT>") = 8
+# fwrite_unlocked(0x37c8b7b0, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd31, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b870, 1, 4, "<STDOUT>") = 4
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd31, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b7f0, 1, 5, "<STDOUT>") = 5
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b8d0, 1, 2, "<STDOUT>") = 2
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd84, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b890, 1, 8, "<STDOUT>") = 8
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b7d0, 1, 6, "<STDOUT>") = 6
+# fwrite_unlocked(0x37c8b810, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x37c8b850, 1, 2, "<STDOUT>") = 2
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd31, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b830, 1, 5, "<STDOUT>") = 5
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd31, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c8b8f0, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x36bd313c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x37c7cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x36bd2d5e, 1, 1, "<STDOUT>") = 1
+# fflush_unlocked("<STDOUT>") = 0
+# fflush("<STDOUT>") = 0
+# fclose("<STDOUT>") = 0
+# fflush("<STDERR>") = 0
+# fclose("<STDERR>") = 0
+# fopen("/proc/filesystems", "re") = "/proc/filesystems"
+# fclose("/proc/filesystems") = 0
+# opendir(".") = "/home/tommy/nctu_lesson/unix/labs/lab2"
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = gg
+# lstat(1, "gg", "0x6d02e8c8" {mode=33204, size=5144}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = Makefile
+# lstat(1, "Makefile", "0x6d02e990" {mode=33188, size=198}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = readme.md
+# lstat(1, "readme.md", "0x6d02ea58" {mode=33188, size=1113}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = .
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = main.c
+# lstat(1, "main.c", "0x6d02eb20" {mode=33204, size=146}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = test3
+# lstat(1, "test3", "0x6d02ebe8" {mode=16893, size=4096}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = notes.txt
+# lstat(1, "notes.txt", "0x6d02ecb0" {mode=33188, size=2809}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = test2
+# lstat(1, "test2", "0x6d02ed78" {mode=16893, size=4096}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = ss
+# lstat(1, "ss", "0x6d02ee40" {mode=33204, size=9487}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = ..
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = test
+# lstat(1, "test", "0x6d02ef08" {mode=16893, size=4096}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = fsmon.so
+# lstat(1, "fsmon.so", "0x6d02efd0" {mode=33277, size=34480}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = fsmon.c
+# lstat(1, "fsmon.c", "0x6d02f098" {mode=33204, size=31759}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = fs
+# lstat(1, "fs", "0x6d02f160" {mode=33188, size=2709}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = testcases
+# lstat(1, "testcases", "0x6d02f228" {mode=16877, size=4096}) = 0
+# readdir("/home/tommy/nctu_lesson/unix/labs/lab2") = a.out
+# lstat(1, "a.out", "0x6d02f2f0" {mode=33277, size=8392}) = 0
+# closedir("/home/tommy/nctu_lesson/unix/labs/lab2") = 0
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd84, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b910, 1, 5, "<STDOUT>") = 5
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b8b0, 1, 7, "<STDOUT>") = 7
+# fwrite_unlocked(0x6d03b770, 1, 2, "<STDOUT>") = 2
+# fwrite_unlocked(0x6d03b790, 1, 8, "<STDOUT>") = 8
+# fwrite_unlocked(0x6d03b7b0, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd31, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b870, 1, 4, "<STDOUT>") = 4
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd31, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b7f0, 1, 5, "<STDOUT>") = 5
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b8d0, 1, 2, "<STDOUT>") = 2
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd84, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b890, 1, 8, "<STDOUT>") = 8
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b7d0, 1, 6, "<STDOUT>") = 6
+# fwrite_unlocked(0x6d03b810, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x6d03b850, 1, 2, "<STDOUT>") = 2
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd31, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b830, 1, 5, "<STDOUT>") = 5
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd31, 5, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d03b8f0, 1, 9, "<STDOUT>") = 9
+# fwrite_unlocked(0x6c09113c, 2, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6d02cd30, 1, 1, "<STDOUT>") = 1
+# fwrite_unlocked(0x6c090d5e, 1, 1, "<STDOUT>") = 1
+# fflush_unlocked("<STDOUT>") = 0
+# fflush("<STDOUT>") = 0
+# fclose("<STDOUT>") = 0
+# fflush("<STDERR>") = 0
+# fclose("<STDERR>") = 0

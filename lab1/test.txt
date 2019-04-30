@@ -1,0 +1,2 @@
+sudo valgrind --tool=memcheck --leak-check=full ./a.out
+sudo valgrind --tool=memcheck --leak-check=full --max-stackframe=2744048 ./a.out

@@ -1,0 +1,19 @@
+Q:需要從comm跟cmdline挖到程式名稱跟參數嗎？還是只需要從cmdline拿就好了
+A:只需要從cmdline拿就好了
+
+Q:tcp4, tcp6是否要分開顯示？
+A:這部份範例有了，tcp4下面接tcp6
+
+Q:filter string是需要所有東西都fileter(ex:tcp, udp)，還是只要filter檔名就行了？
+A:是，有寫在spec
+
+Q:在非root的情況下，可能會有無權讀是哪個pid，所以這時候netstat會在pid有一個'-'符號。有需要處理這個情況嗎？
+
+Q:every process has 4G linear address
+1G for kernel ， kernel space都是指向同樣的physical address嗎？
+
+Q:在現代的linux中，所有kernel都會在main memory裡嗎？
+
+Q:
+
+
