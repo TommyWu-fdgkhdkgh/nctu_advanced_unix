@@ -119,7 +119,7 @@ void display_message(pid pids[], inode inodes[], int *nindex, int*pindex, char *
   }
 
   if(first==0){
-    printf("\n");
+    //printf("\n");
   }
 
   first=1;
@@ -137,7 +137,7 @@ void display_message(pid pids[], inode inodes[], int *nindex, int*pindex, char *
           for(int k=0;k<*nindex;k++){
             if(inodes[k].inode_n==pids[i].inodes[j] && inodes[k].proto==p){
               if(first==1){
-                printf("List of UDP connections:\n");
+                printf("\nList of UDP connections:\n");
 		printf("%-12s%-25s%-25s%-20s\n", "Proto", "Local Address", "Foreign Address", "PID/Program name and arguments");
                 //printf("Proto\tLocal Address\t\tForeign Address\t\tPID/Program name and arguments\n");
                 first=0;

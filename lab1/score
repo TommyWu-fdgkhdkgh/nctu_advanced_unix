@@ -1,0 +1,10 @@
+option:
+
+  需要處理-t -u filter string同時存在的情況
+
+local address:
+
+  ipv6的local address前面被截掉了
+
+
+

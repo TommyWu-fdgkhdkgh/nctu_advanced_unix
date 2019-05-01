@@ -22,6 +22,14 @@ int (*new_dup)(int oldfd);
 int output = 0;
 char *filename;
 
+
+/*
+ * char type >>> print string
+ * fd(int), FILE *, DIR * >>> print string
+ * struct stat >>> type, size
+ */
+
+
 __attribute__((constructor(111))) static void construct(){
 
   new_fprintf = DLSYM("fprintf");
@@ -39,10 +47,22 @@ __attribute__((constructor(111))) static void construct(){
 }
 
 
-
+/*
+ *  <<<fd2filename
+ */
 void fd2filename(int fd, char buf[], int bufsiz){
   new_readlink = DLSYM("readlink");
 
+  if(fd==0){
+    strcpy(buf, "<STDIN>\x00");
+    return;
+  }else if(fd==1){
+    strcpy(buf, "<STDOUT>\x00");
+    return;
+  }else if(fd==2){
+    strcpy(buf, "<STDERR>\x00");
+    return;
+  }
 
   char path[256];
   memset(path,0,256); 
@@ -50,6 +70,9 @@ void fd2filename(int fd, char buf[], int bufsiz){
   new_readlink(path, buf, bufsiz);
 }
 
+/*
+ * <<<FILE2filename
+ */
 void FILE2filename(FILE *st, char buf[]){
   new_readlink = DLSYM("readlink");
 
@@ -72,6 +95,9 @@ void FILE2filename(FILE *st, char buf[]){
   int result = new_readlink(path, buf, 256);
 }
 
+/*
+ * <<<DIR2filename
+ */
 void DIR2filename(DIR *dirp, char buf[]){
   new_readlink = DLSYM("readlink");  
 
@@ -83,7 +109,7 @@ void DIR2filename(DIR *dirp, char buf[]){
 }
 
 /*
- *  fputs_unlocked
+ *  <<<fputs_unlocked
  */
 int fputs_unlocked(const char *s, FILE *stream){
   filename = getenv("MONITOR_OUTPUT");
@@ -118,7 +144,7 @@ int fputs_unlocked(const char *s, FILE *stream){
 }
 
 /*
- *  fflush
+ *  <<<fflush
  */
 int fflush(FILE *stream){
   filename = getenv("MONITOR_OUTPUT");
@@ -152,7 +178,7 @@ int fflush(FILE *stream){
 }
 
 /*
- *  fflush_unlocked
+ *  <<<fflush_unlocked
  */
 int fflush_unlocked(FILE *stream){
   filename = getenv("MONITOR_OUTPUT");
@@ -186,7 +212,7 @@ int fflush_unlocked(FILE *stream){
 }
 
 /*
- *  fwrite_unlocked
+ *  <<<fwrite_unlocked
  */
 size_t fwrite_unlocked(const void *ptr, size_t size, size_t n, FILE *stream){
   filename = getenv("MONITOR_OUTPUT");
@@ -221,7 +247,7 @@ size_t fwrite_unlocked(const void *ptr, size_t size, size_t n, FILE *stream){
 
 
 /*
- * rmdir
+ * <<<rmdir
  */
 
 int rmdir(const char *pathname){
@@ -251,7 +277,7 @@ int rmdir(const char *pathname){
 }
 
 /*
- * mkdir
+ * <<<mkdir
  */
 int mkdir(const char *pathname, mode_t mode){
   filename = getenv("MONITOR_OUTPUT");
@@ -268,11 +294,11 @@ int mkdir(const char *pathname, mode_t mode){
   int result = new_mkdir(pathname, mode);
   
   if(output==0){
-    new_fprintf(stderr , "# mkdir(\"%s\", %d) = %d\n", pathname, mode);
+    new_fprintf(stderr , "# mkdir(\"%s\", %d) = %d\n", pathname, mode, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# mkdir(\"%s\", %d) = %d\n", pathname, mode);
+    new_fprintf(pFile, "# mkdir(\"%s\", %d) = %d\n", pathname, mode, result);
     new_fclose(pFile); 
   } 
  
@@ -281,7 +307,7 @@ int mkdir(const char *pathname, mode_t mode){
 
 
 /*
- * symlink
+ * <<<symlink
  */
 int symlink(const char *target, const char *linkpath){
   filename = getenv("MONITOR_OUTPUT");
@@ -311,7 +337,7 @@ int symlink(const char *target, const char *linkpath){
 
 
 /*
- * readlink
+ * <<<readlink
  */
 ssize_t readlink(const char *pathname, char *buf, size_t bufsiz){
   filename = getenv("MONITOR_OUTPUT");
@@ -328,11 +354,11 @@ ssize_t readlink(const char *pathname, char *buf, size_t bufsiz){
   int result = new_readlink(pathname, buf, bufsiz);
 
   if(output==0){
-    new_fprintf(stderr, "# readlink(\"%s\", \"%s\", %d) = %d\n", pathname, buf, bufsiz);
+    new_fprintf(stderr, "# readlink(\"%s\", \"%s\", %d) = %d\n", pathname, buf, bufsiz, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# readlink(\"%s\", \"%s\", %d) = %d\n", pathname, buf, bufsiz);
+    new_fprintf(pFile, "# readlink(\"%s\", \"%s\", %d) = %d\n", pathname, buf, bufsiz, result);
     new_fclose(pFile);
   }   
   return result;
@@ -342,7 +368,7 @@ ssize_t readlink(const char *pathname, char *buf, size_t bufsiz){
 
 
 /*
- * unlink
+ * <<<unlink
  */
 int unlink(const char *pathname){
   filename = getenv("MONITOR_OUTPUT");
@@ -372,7 +398,7 @@ int unlink(const char *pathname){
 
 
 /*
- * link
+ * <<<link
  */
 int link(const char *oldpath, const char *newpath){
   filename = getenv("MONITOR_OUTPUT");
@@ -401,7 +427,7 @@ int link(const char *oldpath, const char *newpath){
 
 
 /*
- * rename 
+ * <<<rename 
  */
 int rename(const char *oldpath, const char *newpath){
   filename = getenv("MONITOR_OUTPUT");
@@ -418,18 +444,18 @@ int rename(const char *oldpath, const char *newpath){
   int result = new_rename(oldpath, newpath);
 
   if(output==0){
-    new_fprintf(stderr, "# rename(\"%s\", \"%s\") = %d\n", oldpath, newpath);
+    new_fprintf(stderr, "# rename(\"%s\", \"%s\") = %d\n", oldpath, newpath, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# rename(\"%s\", \"%s\") = %d\n", oldpath, newpath);
+    new_fprintf(pFile, "# rename(\"%s\", \"%s\") = %d\n", oldpath, newpath, result);
     new_fclose(pFile);
   } 
   return result;
 }
 
 /*
- * remove
+ * <<<remove
  */
 int remove(const char *pathname){
   filename = getenv("MONITOR_OUTPUT");
@@ -458,7 +484,7 @@ int remove(const char *pathname){
 
 
 /*
- * chmod
+ * <<<chmod
  */
 int chmod(const char *pathname, mode_t mode){
   filename = getenv("MONITOR_OUTPUT");
@@ -488,7 +514,7 @@ int chmod(const char *pathname, mode_t mode){
 
 
 /*
- * chown
+ * <<<chown
  */
 int chown(const char *pathname, uid_t owner, gid_t group){
   filename = getenv("MONITOR_OUTPUT");
@@ -504,11 +530,11 @@ int chown(const char *pathname, uid_t owner, gid_t group){
 
   int result = new_chown(pathname, owner, group);
   if(output==0){
-    new_fprintf(stderr, "# chown(\"%s\", %d, %d) = %d\n", pathname, owner, group); 
+    new_fprintf(stderr, "# chown(\"%s\", %d, %d) = %d\n", pathname, owner, group, result); 
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+"); 
-    new_fprintf(pFile, "# chown(\"%s\", %d, %d) = %d\n", pathname, owner, group); 
+    new_fprintf(pFile, "# chown(\"%s\", %d, %d) = %d\n", pathname, owner, group, result); 
     new_fclose(pFile);
   } 
   return result;
@@ -516,7 +542,7 @@ int chown(const char *pathname, uid_t owner, gid_t group){
 
 
 /*
- * chdir
+ * <<<chdir
  */
 int chdir(const char *path){
   filename = getenv("MONITOR_OUTPUT");
@@ -546,7 +572,7 @@ int chdir(const char *path){
 
 
 /*
- * fprintf
+ * <<<fprintf
  */
 
 int fprintf(FILE *restrict stream, const char *restrict format,...){
@@ -588,7 +614,7 @@ int fprintf(FILE *restrict stream, const char *restrict format,...){
 
 
 /*
- * fread
+ * <<<fread
  */
 size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream){
   filename = getenv("MONITOR_OUTPUT");
@@ -610,11 +636,11 @@ size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream){
   FILE2filename(stream, name);
 
   if(output==0){
-    new_fprintf(stderr, "# fread(\"%s\", %d, %d, %s) = %d\n", ptr, size, nmemb, name, result);
+    new_fprintf(stderr, "# fread(0x%x, %d, %d, %s) = %d\n", ptr, size, nmemb, name, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# fread(\"%s\", %d, %d, %s) = %d\n", ptr, size, nmemb, name, result);
+    new_fprintf(pFile, "# fread(0x%s, %d, %d, %s) = %d\n", ptr, size, nmemb, name, result);
     new_fclose(pFile); 
   }
   
@@ -622,7 +648,7 @@ size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream){
 }
 
 /*
- * fwrite
+ * <<<fwrite
  */
 size_t fwrite(const void *restrict ptr, size_t size, size_t nitems, FILE *restrict stream){
   filename = getenv("MONITOR_OUTPUT");
@@ -643,11 +669,11 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t nitems, FILE *restri
   FILE2filename(stream, name);
 
   if(output==0){
-    new_fprintf(stderr, "# fwrite(\"%s\", %d, %d, \"%s\") = %d\n", ptr, size, nitems, name, result);
+    new_fprintf(stderr, "# fwrite(0x%x, %d, %d, \"%s\") = %d\n", ptr, size, nitems, name, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# fwrite(\"%s\", %d, %d, \"%s\") = %d\n", ptr, size, nitems, name, result);
+    new_fprintf(pFile, "# fwrite(0x%x, %d, %d, \"%s\") = %d\n", ptr, size, nitems, name, result);
     new_fclose(pFile);
   }
 
@@ -655,7 +681,7 @@ size_t fwrite(const void *restrict ptr, size_t size, size_t nitems, FILE *restri
 }
 
 /*
- * fgetc
+ * <<<fgetc
  */
 int fgetc(FILE *stream){
   filename = getenv("MONITOR_OUTPUT");
@@ -688,7 +714,7 @@ int fgetc(FILE *stream){
 }
 
 /*
- * fgets
+ * <<<fgets
  */
 char *fgets(char *s, int size, FILE *stream){
   filename = getenv("MONITOR_OUTPUT");
@@ -721,7 +747,7 @@ char *fgets(char *s, int size, FILE *stream){
 }
 
 /*
- * fscanf
+ * <<<fscanf
  */
 
 
@@ -752,7 +778,7 @@ int fscanf(FILE *restrict stream, const char *restrict format, ...){
     new_fprintf(stderr, "# fscanf(\"%s\", \"%s\", ...) = %d\n", name, format, result);
   } else {
     FILE *pFile;
-    new_fopen(filename, "a+");
+    pFile = new_fopen(filename, "a+");
     new_fprintf(pFile, "# fscanf(\"%s\", \"%s\", ...) = %d\n", name, format, result);
     new_fclose(pFile);
   }
@@ -765,7 +791,7 @@ int fscanf(FILE *restrict stream, const char *restrict format, ...){
 
 
 /*
- * __isoc99_fscanf
+ * <<<__isoc99_fscanf
  */
 int __isoc99_fscanf(FILE *restrict stream, const char *restrict format, ...){
   filename = getenv("MONITOR_OUTPUT");
@@ -793,7 +819,7 @@ int __isoc99_fscanf(FILE *restrict stream, const char *restrict format, ...){
     new_fprintf(stderr, "# fscanf(\"%s\", \"%s\", ...) = %d\n", name, format, result);
   } else {
     FILE *pFile;
-    new_fopen(filename, "a+");
+    pFile = new_fopen(filename, "a+");
     new_fprintf(pFile, "# fscanf(\"%s\", \"%s\", ...) = %d\n", name, format, result);
     new_fclose(pFile); 
   }
@@ -804,7 +830,7 @@ int __isoc99_fscanf(FILE *restrict stream, const char *restrict format, ...){
 
 
 /*
- * closedir
+ * <<<closedir
  */
 int closedir(DIR *dirp){
   filename = getenv("MONITOR_OUTPUT");
@@ -827,7 +853,7 @@ int closedir(DIR *dirp){
   result = new_closedir(dirp);
  
   if(output==0){ 
-    new_fprintf(stderr, "closedir(\"%s\") = %d\n", name, result);
+    new_fprintf(stderr, "# closedir(\"%s\") = %d\n", name, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
@@ -839,7 +865,7 @@ int closedir(DIR *dirp){
 }
 
 /*
- * opendir
+ * <<<opendir
  */
 DIR *opendir(const char *name){
   filename = getenv("MONITOR_OUTPUT");
@@ -876,7 +902,7 @@ DIR *opendir(const char *name){
 }
 
 /*
- * readdir
+ * <<<readdir
  */
 struct dirent *readdir(DIR *dirp){
   filename = getenv("MONITOR_OUTPUT");
@@ -909,7 +935,7 @@ struct dirent *readdir(DIR *dirp){
 
 
 /*
- * creat
+ * <<<creat
  */
 int creat(const char *pathname, mode_t mode){
   filename = getenv("MONITOR_OUTPUT");
@@ -941,7 +967,7 @@ int creat(const char *pathname, mode_t mode){
 }
 
 /*
- * open
+ * <<<open
  */
 int open(const char *pathname, int flags, ...){
   filename = getenv("MONITOR_OUTPUT");
@@ -994,7 +1020,7 @@ int open(const char *pathname, int flags, ...){
 
 
 /* 
- * dup
+ * <<<dup
  */
 int dup(int fd){
   filename = getenv("MONITOR_OUTPUT");
@@ -1007,16 +1033,22 @@ int dup(int fd){
   new_fopen   = DLSYM("fopen"); 
   new_fclose  = DLSYM("fclose");
 
+
+  char name[256];
+  memset(name, 0, 256);
+  fd2filename(fd, name, 256);
+
   int result;
   new_dup = DLSYM("dup");
   result = new_dup(fd);
 
+
   if(output==0){
-    new_fprintf(stderr, "# dup(%d) = %d\n",fd, result);
+    new_fprintf(stderr, "# dup(\"%s\") = %d\n", name, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# dup(%d) = %d\n",fd, result);
+    new_fprintf(pFile, "# dup(\"%s\") = %d\n", name, result);
     new_fclose(pFile);
   }
 
@@ -1026,7 +1058,8 @@ int dup(int fd){
 
 
 /*
- * dup2
+ * <<<dup2
+ * 在這個function把參數變字串感覺很怪
  */
 int dup2(int oldfd, int newfd){
   filename = getenv("MONITOR_OUTPUT");
@@ -1044,6 +1077,8 @@ int dup2(int oldfd, int newfd){
   new_dup2  = DLSYM("dup2");
   result = new_dup2(oldfd, newfd);
 
+
+
   if(output==0){
     new_fprintf(stderr, "# dup2(%d, %d) = %d\n", oldfd, newfd, result);
   } else {
@@ -1057,7 +1092,7 @@ int dup2(int oldfd, int newfd){
 
 
 /*
- * close
+ * <<<close
  * 似乎也有可能會把stderr的fd給關掉，試著處理一下
  */
 int close(int fd){
@@ -1067,28 +1102,46 @@ int close(int fd){
   }
 
   int (*new_close)(int fd);
-  new_fprintf = DLSYM("fprintf"); 
-  new_fopen   = DLSYM("fopen"); 
-  new_fclose  = DLSYM("fclose");
+  //new_fprintf = DLSYM("fprintf"); 
+  //new_fopen   = DLSYM("fopen"); 
+  //new_fclose  = DLSYM("fclose");
+  //new_close = DLSYM("close");
+  void *handle = dlopen("libc.so.6", RTLD_LAZY);
+  if(handle != NULL){
+    new_close = dlsym(handle, "close");
+    new_fopen = dlsym(handle, "fopen");
+    new_fclose = dlsym(handle, "fclose");
+    new_fprintf = dlsym(handle, "fprintf");
+  }
 
   int result;
 
   int fd_stderr = new_dup(2);
   FILE *file_stderr = fdopen(fd_stderr, "a+");
 
-  new_close = DLSYM("close");
+
+  char name[256];
+  memset(name, 0, 256);
+  fd2filename(fd, name, 256);
+
   result = new_close(fd);
 
+
+  //ls -al不斷core dump的問題被這一段給解決了，終究不知道為什麼
+  if(file_stderr==NULL){
+    return result;
+  }
+
   if(output==0){
-    new_fprintf(file_stderr, "# close(%d) = %d\n", fd, result);
+    new_fprintf(file_stderr, "# close(\"%s\") = %d\n", name, result);
   } else {
     FILE *pFile;
-    pFile = fopen(filename, "a+");
-    new_fprintf(pFile, "# close(%d) = %d\n", fd, result);
+    pFile = new_fopen(filename, "a+");
+    new_fprintf(pFile, "# close(\"%s\") = %d\n", name, result);
     new_fclose(pFile);
   }
 
-  new_fclose(file_stderr);
+  //new_fclose(file_stderr);
 
   return result;
 }
@@ -1096,7 +1149,7 @@ int close(int fd){
 
 
 /*
- * lstat
+ * <<<lstat
  * 注意符號不一樣
  */
 int lstat(const char *pathname, struct stat *statbuf){
@@ -1116,11 +1169,11 @@ int lstat(const char *pathname, struct stat *statbuf){
   result = new_lstat(pathname, statbuf);
 
   if(output==0){
-    new_fprintf(stderr, "# lstat(\"%s\", \"%s\" {mode=%d, size=%d}) = %d\n", pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
+    new_fprintf(stderr, "# lstat(\"%s\", 0x%x {mode=%d, size=%d}) = %d\n", pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# lstat(\"%s\", \"%s\" {mode=%d, size=%d}) = %d\n", pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
+    new_fprintf(pFile, "# lstat(\"%s\", 0x%x {mode=%d, size=%d}) = %d\n", pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
     new_fclose(pFile); 
   }
 
@@ -1128,7 +1181,7 @@ int lstat(const char *pathname, struct stat *statbuf){
 }
 
 /*
- * __lxstat
+ * <<<__lxstat
  * 注意符號不一樣
  */
 int __lxstat(int ver, const char *pathname, struct stat *statbuf){
@@ -1148,11 +1201,11 @@ int __lxstat(int ver, const char *pathname, struct stat *statbuf){
   result = new_lstat(ver, pathname, statbuf);
 
   if(output==0){
-    new_fprintf(stderr, "# lstat(%d, \"%s\", \"0x%x\" {mode=%d, size=%d}) = %d\n", ver, pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
+    new_fprintf(stderr, "# lstat(%d, \"%s\", 0x%x {mode=%d, size=%d}) = %d\n", ver, pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# lstat(%d, \"%s\", \"0x%x\" {mode=%d, size=%d}) = %d\n", ver, pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
+    new_fprintf(pFile, "# lstat(%d, \"%s\", 0x%x {mode=%d, size=%d}) = %d\n", ver, pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
     new_fclose(pFile); 
   }
 
@@ -1162,7 +1215,7 @@ int __lxstat(int ver, const char *pathname, struct stat *statbuf){
 
 
 /*
- * stat
+ * <<<stat
  * 注意符號不一樣
  */
 int stat(const char *pathname, struct stat *statbuf){
@@ -1182,11 +1235,11 @@ int stat(const char *pathname, struct stat *statbuf){
   result = new_stat(pathname, statbuf);
 
   if(output==0){
-    new_fprintf(stderr, "# stat(\"%s\", \"0x%x\" {mode=%d, size=%d}) = %d\n", pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
+    new_fprintf(stderr, "# stat(\"%s\", 0x%x {mode=%d, size=%d}) = %d\n", pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# stat(\"%s\", \"0x%x\" {mode=%d, size=%d}) = %d\n", pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
+    new_fprintf(pFile, "# stat(\"%s\", 0x%x {mode=%d, size=%d}) = %d\n", pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
     new_fclose(pFile);
   }
 
@@ -1196,7 +1249,7 @@ int stat(const char *pathname, struct stat *statbuf){
 
 
 /*
- * __xstat
+ * <<<__xstat
  * 注意符號不一樣
  */
 int __xstat(int ver, const char *pathname, struct stat *statbuf){
@@ -1216,18 +1269,18 @@ int __xstat(int ver, const char *pathname, struct stat *statbuf){
   result = new_stat(ver, pathname, statbuf);
 
   if(output==0){
-    new_fprintf(stderr, "# stat(%d, \"%s\", \"0x%x\" {mode=%d, size=%d}) = %d\n", ver, pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
+    new_fprintf(stderr, "# stat(%d, \"%s\", 0x%x {mode=%d, size=%d}) = %d\n", ver, pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# stat(%d, \"%s\", \"0x%x\" {mode=%d, size=%d}) = %d\n", ver, pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
+    new_fprintf(pFile, "# stat(%d, \"%s\", 0x%x {mode=%d, size=%d}) = %d\n", ver, pathname, statbuf, statbuf->st_mode, statbuf->st_size, result);
     new_fclose(pFile);
   }
   return result;
 }
 
 /*
- * pwrite
+ * <<<pwrite
  */
 ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset){
   filename = getenv("MONITOR_OUTPUT");
@@ -1246,11 +1299,11 @@ ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset){
   result = new_pwrite(fd, buf, count, offset);
 
   if(output==0){
-    new_fprintf(stderr, "# pwrite(%d, \"%s\", %d, %d) = %d\n", fd, buf, count, offset);
+    new_fprintf(stderr, "# pwrite(%d, 0x%x, %d, %d) = %d\n", fd, buf, count, offset, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# pwrite(%d, \"%s\", %d, %d) = %d\n", fd, buf, count, offset);
+    new_fprintf(pFile, "# pwrite(%d, 0x%x, %d, %d) = %d\n", fd, buf, count, offset, result);
     new_fclose(pFile); 
   }
 
@@ -1259,7 +1312,7 @@ ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset){
 
 
 /*
- * fopen
+ * <<<fopen
  */
 FILE *fopen(const char *pathname, const char *mode){
   filename = getenv("MONITOR_OUTPUT");
@@ -1270,7 +1323,13 @@ FILE *fopen(const char *pathname, const char *mode){
     //printf("NULL\n");
   }
 
-  new_fopen   = DLSYM("fopen");
+  //new_fopen   = DLSYM("fopen");
+  
+  void *handle = dlopen("libc.so.6", RTLD_LAZY);
+  if(handle != NULL) {
+    new_fopen = dlsym(handle, "fopen");
+  }
+  
   new_fprintf = DLSYM("fprintf"); 
   new_fclose  = DLSYM("fclose");
 
@@ -1282,6 +1341,7 @@ FILE *fopen(const char *pathname, const char *mode){
   char name[256];
   memset(name, 0, 256);
   FILE2filename(result, name);
+
 
   if(output==0){
     new_fprintf(stderr, "# fopen(\"%s\", \"%s\") = \"%s\"\n", pathname, mode, name);
@@ -1298,7 +1358,7 @@ FILE *fopen(const char *pathname, const char *mode){
 
 
 /*
- * fclose
+ * <<<fclose
  * 可能會把stderr關掉，要記得特別處理
  */
 int fclose(FILE *stream){
@@ -1342,7 +1402,7 @@ int fclose(FILE *stream){
 
 
 /*
- * read
+ * <<<read
  */
 ssize_t read(int fd, void *buf, size_t nbytes){
   filename = getenv("MONITOR_OUTPUT");
@@ -1360,14 +1420,14 @@ ssize_t read(int fd, void *buf, size_t nbytes){
 
   char name[256];
   memset(name, 0, 256);
-  fd2filename(fd, name, 50);
+  fd2filename(fd, name, 256);
 
   if(output==0){
-    new_fprintf(stderr, "# read(\"%s\", \"%s\", %d) = %d\n", name, buf, nbytes, result);
+    new_fprintf(stderr, "# read(\"%s\", 0x%x, %d) = %d\n", name, buf, nbytes, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# read(\"%s\", \"%s\", %d) = %d\n", name, buf, nbytes, result);
+    new_fprintf(pFile, "# read(\"%s\", 0x%x, %d) = %d\n", name, buf, nbytes, result);
     new_fclose(pFile);
   }
   return result;
@@ -1375,7 +1435,7 @@ ssize_t read(int fd, void *buf, size_t nbytes){
 
 
 /*
- *  write
+ *  <<<write
  */
 ssize_t write (int fd, const void *buf, size_t nbytes){
   filename = getenv("MONITOR_OUTPUT");
@@ -1393,11 +1453,11 @@ ssize_t write (int fd, const void *buf, size_t nbytes){
   new_fclose  = DLSYM("fclose");
 
   if(output==0){
-    new_fprintf(stderr, "# write(%d, \"%s\", %d) = %d\n", fd, buf, nbytes, result);
+    new_fprintf(stderr, "# write(%d, 0x%x, %d) = %d\n", fd, buf, nbytes, result);
   } else {
     FILE *pFile;
     pFile = new_fopen(filename, "a+");
-    new_fprintf(pFile, "# write(%d, \"%s\", %d) = %d\n", fd, buf, nbytes, result);
+    new_fprintf(pFile, "# write(%d, 0x%x, %d) = %d\n", fd, buf, nbytes, result);
     new_fclose(pFile); 
   } 
 

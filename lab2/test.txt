@@ -1,0 +1,5 @@
+MONITOR_OUTPUT=fsmon.log LD_PRELOAD=./fsmon.so valgrind --tool=memcheck --leak-check=full head -n 1000 /etc/services > /dev/null
+
+LD_PRELOAD=./fsmon.so valgrind --tool=memcheck --leak-check=full ls -al
+
+LD_PRELOAD=./fsmon.so valgrind --tool=memcheck --leak-check=full ./fscanf
