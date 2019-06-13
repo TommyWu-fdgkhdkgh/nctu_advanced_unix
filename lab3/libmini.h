@@ -129,6 +129,8 @@ long sys_rt_sigpending(sigset_t *set, size_t sigsetsize);
 long sys_nanosleep(struct timespec *rqtp, struct timespec *rmtp);
 long sys_rt_sigaction(int sig, const struct sigaction *act, struct sigaction *oact, size_t sigsetsize);
 long sys_rt_sigreturn(unsigned long __unused);
+int setjmp_asm(jmp_buf env);
+void longjmp_asm(jmp_buf env, int val);
 
 //signals
 #define SIGHUP		 1

@@ -177,5 +177,30 @@ int strlen(char *st){
 	return i;
 }
 
+int setjmp(jmp_buf env){
+	// 1. sigprocmask(0, NULL, oldset);
+	// 因為第二個參數是NULL，目前的sigset_t會被放到第三個參數
+	// 2. 把oldset存到jmp_buf的mask
+	sigset_t st;
+	sigprocmask(SIG_SETMASK, NULL, &st);
+	env->mask = st;	
+
+	setjmp_asm(env);
+
+}
+void longjmp(jmp_buf env, int val){
+
+	// 1.把env裡的mask拿出來
+	// 2.用sigprocmask(0, NULL, oldset)得知目前的mask情況
+	// 3.把block跟unblock的情況復原成env裡面存的
+	sigset_t st = env->mask;
+	sigprocmask(SIG_BLOCK, &st, NULL);
+	sigset_t unblock = ~st;
+	sigprocmask(SIG_UNBLOCK, &unblock, NULL);	
+
+	longjmp_asm(env, val);
+
+}
+
 
 

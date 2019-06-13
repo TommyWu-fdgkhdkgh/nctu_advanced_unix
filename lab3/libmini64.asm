@@ -126,36 +126,47 @@ sys_rt_sigreturn:
 	;pop	r10
 	;ret
 ;<<<setjmp
-global setjmp:function
-setjmp:
-	;保存rbp
-	push	rbp
-	mov	rbp,	rsp	
+global setjmp_asm:function
+setjmp_asm:
+
+	;消去call setjmp所影響到的stack frame(因為要保存的狀態是在main下的stack frame)
+	;要依照setjmp的stack大小而改變
+	add	rbp,	0x20	
+	add	rsp,	0x30
 	
-	;在stack上清出一個空間
-	sub	rsp,	0x10
-	
-	mov	[rdi+JB_RBX*8],	rbx
-	mov	rbx,	[rbp+8]
 
 	mov	[rdi+JB_RBP*8],	rbp
+
+	;push	rbp
+	;mov	rbp,	rsp	
+	
+	;在stack上清出一個空間
+	;sub	rsp,	0x10
+	
+	mov	[rdi+JB_RBX*8],	rbx
+	mov	rbx,	[rsp]
 	mov	[rdi+JB_R12*8],	r12
 	mov	[rdi+JB_R13*8],	r13
 	mov	[rdi+JB_R14*8],	r14
 	mov	[rdi+JB_R15*8],	r15
+
+	;because of the push of return address
+	add	rsp,	0x8
 	mov	[rdi+JB_RSP*8],	rsp
 	mov	[rdi+JB_PC*8],	rbx
-
 	mov	rax,	0
+	;because of the "ret"
+	sub	rsp,	0x8
+
 
 	;回復原本的rsp
-	mov	rsp,	rbp
+	;mov	rsp,	rbp
 	;回復原本的rbp
-	pop	rbp
+	;pop	rbp
 	ret
 ;<<<longjmp
-global longjmp:function
-longjmp:
+global longjmp_asm:function
+longjmp_asm:
 	;push	rbp
 	;mov	rbp,	rsp
 

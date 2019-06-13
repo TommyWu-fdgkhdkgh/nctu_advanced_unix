@@ -35,11 +35,14 @@ int main(){
 
 	//hi(g);
 
-	volatile int i = 0;
+	/*volatile int i = 0;
 	if(setjmp(jb) != 0){
 		i++;
 	}
-	if(i<10) funs[i]();
+	if(i<10) funs[i]();*/
+
+	int x=1;
+	printf("x:%d ~x:%d\n", x, ~x);
 	
 
 

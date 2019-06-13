@@ -24,22 +24,41 @@ static char err_o[] = "Error opening file.\n";
 static char err_w[] = "Error writing to stdout.\n";
 
 
+
 void handler(int s) { 
 	//puts("get into handler!\n");
+	write(1,"handler\n\x00", 15);
+	longjmp(jb, 1);
 	/* do nothing */ 
 }
 
 
+static jmp_buf jb;
+
 int main(int argc, char *argv[]){
+
+	signal(SIGALRM, handler);
+
+
+	if(setjmp(jb)==0){
+		//puts("first here\n");
+		write(1,"hi\n", 3);
+	}else {
+		write(1,"hi\n", 3);
+		//puts("second here\n");
+	}
+
+	alarm(2);
+	pause();
 
 	//puts("hi!\n");
 
-        volatile int i = 0;
+        /*volatile int i = 0;
 
         if(setjmp(jb) != 0) {
                 i++;
         }
-        if(i < 10) funs[i]();
+        if(i < 10) funs[i]();*/
 
 
 	/*signal(SIGALRM, handler);
